@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Corazones Unidos | Juntos por una infancia feliz</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Cormorant Garamond / Lora para la tipografía serif elegante del logotipo y Plus Jakarta Sans para lectura -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              purple: '#7e22ce',
+              purpleDark: '#581c87',
+              purpleDeep: '#3b0764',
+              lilac: '#f3e8ff',
+              lilacLight: '#faf5ff',
+              lilacBorder: '#c084fc',
+              gold: '#facc15',
+              goldHover: '#eab308',
+              pink: '#e11d48',
+              emerald: '#10b981',
+              amber: '#f59e0b'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serifLogo: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* ===================================================================== */
+    /* ANIMACIONES DEL LOGOTIPO IDÉNTICO A LA IMAGEN (TRAZO Y DESTELLOS)     */
+    /* ===================================================================== */
+    @keyframes logoBadgeEntrance {
+      0% {
+        opacity: 0;
+        transform: translateY(22px) scale(0.92);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes drawHandStroke {
+      0% {
+        stroke-dashoffset: 1000;
+        opacity: 0.2;
+      }
+      15% {
+        opacity: 1;
+      }
+      100% {
+        stroke-dashoffset: 0;
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInLogoText {
+      0% {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulseGentle {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.028);
+      }
+    }
+
+    @keyframes twinkleSparkle {
+      0%, 100% {
+        opacity: 0.15;
+        transform: scale(0.7);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.25);
+      }
+    }
+
+    @keyframes riseHeart {
+      0% {
+        transform: translateY(0) scale(0.6);
+        opacity: 0;
+      }
+      20% {
+        opacity: 0.8;
+      }
+      85% {
+        opacity: 0.55;
+      }
+      100% {
+        transform: translateY(-170px) scale(1.15);
+        opacity: 0;
+      }
+    }
+
+    .animate-badge-entrance {
+      animation: logoBadgeEntrance 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .animate-gentle-float {
+      animation: pulseGentle 4.2s ease-in-out infinite 2.2s;
+    }
+
+    /* Trazo continuo para cada una de las 4 manos */
+    .hand-stroke {
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      animation: drawHandStroke 1.8s cubic-bezier(0.35, 0, 0.25, 1) forwards;
+    }
+    .hand-purple { animation-delay: 0.25s; }
+    .hand-rose   { animation-delay: 0.45s; }
+    .hand-amber  { animation-delay: 0.65s; }
+    .hand-teal   { animation-delay: 0.85s; }
+
+    /* Aparición elegante de la tipografía del logo */
+    .logo-text-anim {
+      opacity: 0;
+      animation: fadeInLogoText 0.9s ease-out 1.1s forwards;
+    }
+
+    /* Destellos alrededor del sello */
+    .sparkle-dot {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: twinkleSparkle 2.8s ease-in-out infinite;
+    }
+
+    /* Partículas flotantes de corazones */
+    .floating-heart {
+      position: absolute;
+      pointer-events: none;
+      animation: riseHeart linear infinite;
+    }
+
+    /* Transiciones suaves para los acordeones interactivos */
+    .accordion-content {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .accordion-item.is-open .accordion-content {
+      grid-template-rows: 1fr;
+    }
+
+    .accordion-inner {
+      overflow: hidden;
+    }
+
+    .accordion-item.is-open .chevron-icon {
+      transform: rotate(180deg);
+      background-color: #7e22ce;
+      color: #ffffff;
+    }
+
+    /* Animación al hacer scroll */
+    .reveal-on-scroll {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    }
+
+    .reveal-on-scroll.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body class="bg-brand-lilacLight text-gray-800 font-sans antialiased selection:bg-brand-purple selection:text-white overflow-x-hidden">
+
+  <!-- ===================================================================== -->
+  <!-- SECCIÓN 1: HERO / ANIMACIÓN DE BIENVENIDA CON FONDO DE NIÑOS Y LOGO   -->
+  <!-- ===================================================================== -->
+  <header class="relative min-h-[94vh] flex flex-col justify-between overflow-hidden bg-brand-purpleDeep text-white">
+    
+    <!-- Imagen de fondo cálida con niños felices y capa morada translúcida -->
+    <div class="absolute inset-0 z-0">
+      <img 
+        src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1600&q=85" 
+        onerror="this.onerror=null; this.src='https://placehold.co/1600x900/581c87/f3e8ff?text=Corazones+Unidos+por+la+Infancia';"
+        alt="Niños felices sonriendo juntos" 
+        class="w-full h-full object-cover object-center scale-105"
+      />
+      <!-- Degradado morado institucional translúcido que funde suavemente hacia la página -->
+      <div class="absolute inset-0 bg-gradient-to-b from-[#3b0764]/85 via-[#581c87]/78 to-[#faf5ff]"></div>
+      
+      <!-- Círculos decorativos estilo cartel -->
+      <div class="hidden sm:block absolute -top-16 -right-16 w-80 h-80 rounded-full bg-purple-400/20 blur-xl"></div>
+      <div class="hidden sm:block absolute top-1/3 -left-20 w-60 h-60 rounded-full bg-pink-400/20 blur-xl"></div>
+    </div>
+
+    <!-- Contenedor de corazones flotantes animados (JS) -->
+    <div id="hearts-container" class="absolute inset-0 z-10 pointer-events-none overflow-hidden"></div>
+
+    <!-- Barra superior -->
+    <nav class="relative z-20 max-w-5xl w-full mx-auto px-4 sm:px-6 pt-5 flex items-center justify-between">
+      <span class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md border border-white/25 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-semibold tracking-wide text-white shadow-sm">
+        <span class="w-2 h-2 rounded-full bg-brand-gold animate-ping"></span>
+        Estudiantes de Psicología
+      </span>
+      <a href="#sumate" class="bg-brand-gold hover:bg-brand-goldHover text-brand-purpleDark font-extrabold text-xs sm:text-sm px-4 py-2 rounded-full shadow-lg transition transform hover:scale-105 active:scale-95">
+        ¡SÚMATE!
+      </a>
+    </nav>
+
+    <!-- Contenido central del Hero con el Logotipo Vectorial Idéntico -->
+    <div class="relative z-20 max-w-4xl mx-auto px-4 sm:px-6 pt-5 pb-12 text-center flex flex-col items-center">
+      
+      <!-- Encabezado principal -->
+      <div class="mb-5 animate-badge-entrance">
+        <p class="uppercase tracking-[0.2em] text-brand-gold font-extrabold text-xs sm:text-sm mb-2 drop-shadow">
+          Iniciativa Comunitaria Solidaria
+        </p>
+        <h1 class="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white drop-shadow-md leading-tight">
+          CON UN GRANITO <span class="text-brand-gold">DE ARENA</span>
+        </h1>
+        <p class="mt-2 text-lg sm:text-2xl font-semibold text-purple-100 drop-shadow">
+          Juntos por los niños · <span class="text-brand-gold font-bold">Estudiantes de Psicología</span>
+        </p>
+      </div>
+
+      <!-- ================================================================= -->
+      <!-- LOGOTIPO SVG VECTORIAL IDÉNTICO A LA IMAGEN (33383.jpg)           -->
+      <!-- ================================================================= -->
+      <div class="animate-badge-entrance my-2 sm:my-3">
+        <div class="animate-gentle-float relative inline-block drop-shadow-2xl">
+          <svg id="corazones-logo-svg" viewBox="0 0 500 500" class="w-72 h-72 sm:w-88 sm:h-88 md:w-[375px] md:h-[375px] mx-auto" role="img" aria-label="Logotipo Corazones Unidos: Juntos por una infancia feliz">
+            <defs>
+              <filter id="badgeDropShadow" x="-15%" y="-15%" width="130%" height="130%">
+                <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#2e0647" flood-opacity="0.32"/>
+              </filter>
+              <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="2.5" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            <!-- Base circular blanca suave detrás del sello festoneado -->
+            <circle cx="250" cy="250" r="236" fill="#ffffff" fill-opacity="0.96" filter="url(#badgeDropShadow)" />
+
+            <!-- Sello festoneado exterior de 16 ondas en lila suave (#f3e8ff) -->
+            <path id="scallop-outer" fill="#f3e8ff" />
+
+            <!-- Borde festoneado interior de 16 ondas en morado claro (#c084fc) -->
+            <path id="scallop-inner" fill="none" stroke="#c084fc" stroke-width="3.6" stroke-linejoin="round" />
+
+            <!-- Destellos suaves animados alrededor del emblema -->
+            <g filter="url(#softGlow)">
+              <circle class="sparkle-dot" style="animation-delay: 0.2s;" cx="122" cy="145" r="3" fill="#ffffff" />
+              <circle class="sparkle-dot" style="animation-delay: 0.9s;" cx="378" cy="148" r="3.5" fill="#facc15" />
+              <circle class="sparkle-dot" style="animation-delay: 1.5s;" cx="110" cy="285" r="2.8" fill="#c084fc" />
+              <circle class="sparkle-dot" style="animation-delay: 2.1s;" cx="388" cy="280" r="3" fill="#ffffff" />
+              <circle class="sparkle-dot" style="animation-delay: 0.6s;" cx="250" cy="72" r="2.8" fill="#ffffff" />
+            </g>
+
+            <!-- ============================================================= -->
+            <!-- LAS 4 MANOS ESTILIZADAS EN REMOLINO CIRCULAR (IDÉNTICAS)      -->
+            <!-- ============================================================= -->
+            <g transform="translate(250, 196) scale(1.06)">
+              
+              <!-- 1. MANO ARRIBA-IZQUIERDA: MORADA (#6b21a8) -->
+              <path 
+                class="hand-stroke hand-purple"
+                d="M -68,-26
+                   C -46,-54 -14,-82 4,-86
+                   C 12,-88 16,-81 9,-75
+                   C -1,-67 -18,-56 -26,-49
+                   C -10,-60 12,-73 22,-75
+                   C 30,-77 33,-69 25,-63
+                   C 14,-55 -6,-45 -15,-39
+                   C 1,-47 21,-56 30,-57
+                   C 38,-58 40,-50 31,-45
+                   C 20,-39 0,-32 -10,-28
+                   C 4,-32 21,-36 28,-35
+                   C 36,-34 37,-26 28,-24
+                   C 14,-21 -9,-19 -20,-18
+                   C -29,-17 -33,-9 -27,1
+                   C -22,9 -15,15 -21,19
+                   C -27,23 -35,14 -41,2
+                   C -48,-11 -52,-21 -58,-28"
+                fill="none" 
+                stroke="#6b21a8" 
+                stroke-width="3.8" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"
+              />
+
+              <!-- 2. MANO ARRIBA-DERECHA: ROSA FUERTE / FUCSIA (#e11d48) -->
+              <g transform="rotate(90)">
+                <path 
+                  class="hand-stroke hand-rose"
+                  d="M -68,-26
+                     C -46,-54 -14,-82 4,-86
+                     C 12,-88 16,-81 9,-75
+                     C -1,-67 -18,-56 -26,-49
+                     C -10,-60 12,-73 22,-75
+                     C 30,-77 33,-69 25,-63
+                     C 14,-55 -6,-45 -15,-39
+                     C 1,-47 21,-56 30,-57
+                     C 38,-58 40,-50 31,-45
+                     C 20,-39 0,-32 -10,-28
+                     C 4,-32 21,-36 28,-35
+                     C 36,-34 37,-26 28,-24
+                     C 14,-21 -9,-19 -20,-18
+                     C -29,-17 -33,-9 -27,1
+                     C -22,9 -15,15 -21,19
+                     C -27,23 -35,14 -41,2
+                     C -48,-11 -52,-21 -58,-28"
+                  fill="none" 
+                  stroke="#e11d48" 
+                  stroke-width="3.8" 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round"
+                />
+              </g>
+
+              <!-- 3. MANO ABAJO-DERECHA: AMARILLA / NARANJA (#f59e0b) -->
+              <g transform="rotate(180)">
+                <path 
+                  class="hand-stroke hand-amber"
+                  d="M -68,-26
+                     C -46,-54 -14,-82 4,-86
+                     C 12,-88 16,-81 9,-75
+                     C -1,-67 -18,-56 -26,-49
+                     C -10,-60 12,-73 22,-75
+                     C 30,-77 33,-69 25,-63
+                     C 14,-55 -6,-45 -15,-39
+                     C 1,-47 21,-56 30,-57
+                     C 38,-58 40,-50 31,-45
+                     C 20,-39 0,-32 -10,-28
+                     C 4,-32 21,-36 28,-35
+                     C 36,-34 37,-26 28,-24
+                     C 14,-21 -9,-19 -20,-18
+                     C -29,-17 -33,-9 -27,1
+                     C -22,9 -15,15 -21,19
+                     C -27,23 -35,14 -41,2
+                     C -48,-11 -52,-21 -58,-28"
+                  fill="none" 
+                  stroke="#f59e0b" 
+                  stroke-width="3.8" 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round"
+                />
+              </g>
+
+              <!-- 4. MANO ABAJO-IZQUIERDA: VERDE AGUA / ESMERALDA (#10b981) -->
+              <g transform="rotate(270)">
+                <path 
+                  class="hand-stroke hand-teal"
+                  d="M -68,-26
+                     C -46,-54 -14,-82 4,-86
+                     C 12,-88 16,-81 9,-75
+                     C -1,-67 -18,-56 -26,-49
+                     C -10,-60 12,-73 22,-75
+                     C 30,-77 33,-69 25,-63
+                     C 14,-55 -6,-45 -15,-39
+                     C 1,-47 21,-56 30,-57
+                     C 38,-58 40,-50 31,-45
+                     C 20,-39 0,-32 -10,-28
+                     C 4,-32 21,-36 28,-35
+                     C 36,-34 37,-26 28,-24
+                     C 14,-21 -9,-19 -20,-18
+                     C -29,-17 -33,-9 -27,1
+                     C -22,9 -15,15 -21,19
+                     C -27,23 -35,14 -41,2
+                     C -48,-11 -52,-21 -58,-28"
+                  fill="none" 
+                  stroke="#10b981" 
+                  stroke-width="3.8" 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round"
+                />
+              </g>
+            </g>
+
+            <!-- ============================================================= -->
+            <!-- TIPOGRAFÍA EXACTA DE LA IMAGEN                                -->
+            <!-- ============================================================= -->
+            <g class="logo-text-anim">
+              <!-- "Corazones" en serif morada con amplio espaciado -->
+              <text 
+                x="250" 
+                y="328" 
+                text-anchor="middle" 
+                fill="#581c87" 
+                font-family="'Cormorant Garamond', Georgia, serif" 
+                font-size="43" 
+                font-weight="600" 
+                letter-spacing="7.5"
+              >
+                Corazones
+              </text>
+
+              <!-- "Juntos por una infancia feliz" en sans-serif gris oscuro -->
+              <text 
+                x="250" 
+                y="355" 
+                text-anchor="middle" 
+                fill="#374151" 
+                font-family="'Plus Jakarta Sans', sans-serif" 
+                font-size="13.5" 
+                font-weight="500" 
+                letter-spacing="2.2"
+              >
+                Juntos por una infancia feliz
+              </text>
+
+              <!-- "unidos" en serif morada en minúsculas con amplio espaciado -->
+              <text 
+                x="250" 
+                y="392" 
+                text-anchor="middle" 
+                fill="#581c87" 
+                font-family="'Cormorant Garamond', Georgia, serif" 
+                font-size="43" 
+                font-weight="600" 
+                letter-spacing="11"
+              >
+                unidos
+              </text>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Indicador para explorar -->
+      <a href="#introduccion" class="mt-2 inline-flex flex-col items-center text-brand-purpleDark font-bold text-sm hover:text-brand-purple transition group">
+        <span class="bg-white/95 backdrop-blur px-4 py-1.5 rounded-full shadow-md border border-purple-200 group-hover:bg-white">
+          Conoce nuestra misión
+        </span>
+        <svg class="w-6 h-6 mt-2 text-brand-purple animate-bounce" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </a>
+    </div>
+  </header>
+
+  <!-- ===================================================================== -->
+  <!-- CONTENIDO PRINCIPAL                                                   -->
+  <!-- ===================================================================== -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 pb-20 space-y-12">
+
+    <!-- =================================================================== -->
+    <!-- SECCIÓN 2: INTRODUCCIÓN: ¿CUÁL ES NUESTRO OBJETIVO? (TEXTO EXACTO)  -->
+    <!-- =================================================================== -->
+    <section id="introduccion" class="reveal-on-scroll bg-white rounded-3xl p-6 sm:p-10 shadow-xl shadow-purple-900/5 border border-purple-100 relative overflow-hidden">
+      <!-- Decoración superior -->
+      <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-brand-purple via-brand-pink to-brand-gold"></div>
+      
+      <div class="flex items-center gap-3 mb-5">
+        <div class="w-11 h-11 rounded-2xl bg-brand-lilac text-brand-purple flex items-center justify-center shrink-0">
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-brand-purpleDark leading-tight">
+          Introducción: ¿Cuál es nuestro objetivo?
+        </h2>
+      </div>
+
+      <div class="space-y-4 text-gray-700 text-base sm:text-lg leading-relaxed">
+        <p>
+          <strong>Corazones Unidos</strong> es una comunidad creada con el propósito de brindar apoyo, acompañamiento y momentos de alegría a niños que se encuentran en situaciones vulnerables, especialmente aquellos que viven en condiciones de calle o cuentan con recursos económicos limitados.
+        </p>
+        <p>
+          Nuestro principal objetivo es contribuir al bienestar de estos pequeños mediante acciones solidarias que permitan atender algunas de sus necesidades básicas, como la alimentación, el vestido y el acceso a momentos de recreación. Buscamos crear una red de personas dispuestas a colaborar, demostrando que, a través de la empatía, la solidaridad y el trabajo en equipo, podemos generar cambios positivos en la vida de quienes más lo necesitan.
+        </p>
+        <p class="bg-brand-lilacLight/90 border-l-4 border-brand-purple p-4 rounded-r-2xl text-brand-purpleDark font-medium">
+          Creemos que ningún acto de bondad es pequeño cuando se realiza de corazón. Por eso, cada aportación, donación y muestra de apoyo representa una oportunidad para construir un entorno más digno, humano y lleno de esperanza para nuestra niñez.
+        </p>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- SECCIÓN 3: LOS 4 PILARES INTERACTIVOS (HAZ CLIC EN CADA PUNTO)      -->
+    <!-- =================================================================== -->
+    <section id="ejes-de-apoyo" class="reveal-on-scroll space-y-5">
+      <div class="text-center sm:text-left px-1">
+        <span class="inline-block text-xs font-extrabold uppercase tracking-wider text-brand-purple bg-brand-lilac px-3 py-1 rounded-full mb-2">
+          Nuestras acciones solidarias
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-brand-purpleDark">
+          Conoce cada forma de ayudar
+        </h2>
+        <p class="text-sm sm:text-base text-gray-600 mt-1">
+          Da clic sobre cada número para desplegar toda la información detallada.
+        </p>
+      </div>
+
+      <div class="space-y-4">
+
+        <!-- PUNTO 1: Entrega de refrigerios -->
+        <article class="accordion-item bg-white rounded-3xl border-2 border-purple-200/80 hover:border-brand-purple shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden">
+          <button 
+            type="button" 
+            class="accordion-trigger w-full text-left p-5 sm:p-6 flex items-center justify-between gap-4 focus:outline-none focus-visible:ring-4 focus-visible:ring-purple-300"
+            aria-expanded="false"
+          >
+            <div class="flex items-start sm:items-center gap-4 sm:gap-5">
+              <span class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-brand-purple text-white font-extrabold text-xl sm:text-2xl flex items-center justify-center shrink-0 shadow-md">
+                1
+              </span>
+              <div>
+                <h3 class="text-lg sm:text-xl font-extrabold text-brand-purple uppercase tracking-wide">
+                  1. Entrega de refrigerios
+                </h3>
+                <p class="text-gray-600 text-sm sm:text-base mt-1">
+                  Alimentos que los niños puedan llevar a la escuela, para aprender con energía.
+                </p>
+              </div>
+            </div>
+            <span class="chevron-icon w-9 h-9 rounded-full bg-brand-lilac text-brand-purple flex items-center justify-center shrink-0 transition-all duration-300">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </span>
+          </button>
+
+          <div class="accordion-content">
+            <div class="accordion-inner">
+              <div class="px-5 sm:px-6 pb-6 pt-2 border-t border-purple-100 bg-brand-lilacLight/40 text-gray-700 space-y-3 text-base leading-relaxed">
+                <h4 class="font-extrabold text-brand-purpleDark text-lg">
+                  ¿Cuál es nuestro objetivo?
+                </h4>
+                <p>
+                  Proporcionar alimentos y refrigerios a niños que, debido a sus condiciones económicas o familiares, pueden tener dificultades para acceder a una alimentación adecuada.
+                </p>
+                <p>
+                  A través de esta actividad buscamos contribuir a satisfacer una necesidad básica, ofrecer un momento de atención y demostrarles que existen personas interesadas en su bienestar. No se trata únicamente de entregar alimentos, sino también de compartir un momento agradable, brindarles atención y hacerles sentir que son importantes para nuestra comunidad.
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- PUNTO 2: Material didactico -->
+        <article class="accordion-item bg-white rounded-3xl border-2 border-purple-200/80 hover:border-brand-purple shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden">
+          <button 
+            type="button" 
+            class="accordion-trigger w-full text-left p-5 sm:p-6 flex items-center justify-between gap-4 focus:outline-none focus-visible:ring-4 focus-visible:ring-purple-300"
+            aria-expanded="false"
+          >
+            <div class="flex items-start sm:items-center gap-4 sm:gap-5">
+              <span class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-brand-purple text-white font-extrabold text-xl sm:text-2xl flex items-center justify-center shrink-0 shadow-md">
+                2
+              </span>
+              <div>
+                <h3 class="text-lg sm:text-xl font-extrabold text-brand-purple uppercase tracking-wide">
+                  2. Material didactico
+                </h3>
+                <p class="text-gray-600 text-sm sm:text-base mt-1">
+                  Útiles y materiales para aprender jugando y creando.
+                </p>
+              </div>
+            </div>
+            <span class="chevron-icon w-9 h-9 rounded-full bg-brand-lilac text-brand-purple flex items-center justify-center shrink-0 transition-all duration-300">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </span>
+          </button>
+
+          <div class="accordion-content">
+            <div class="accordion-inner">
+              <div class="px-5 sm:px-6 pb-6 pt-2 border-t border-purple-100 bg-brand-lilacLight/40 text-gray-700 space-y-3 text-base leading-relaxed">
+                <h4 class="font-extrabold text-brand-purpleDark text-lg">
+                  Estimulación cognitiva y creatividad a través del juego
+                </h4>
+                <p>
+                  Como estudiantes de Psicología sabemos que el juego y la estimulación temprana son pilares esenciales para el desarrollo integral de la infancia. Mediante el material didáctico buscamos despertar su curiosidad, fortalecer su aprendizaje significativo y brindarles espacios sanos para expresar sus emociones.
+                </p>
+                <p>
+                  Con tus donaciones de <strong>libros ilustrados, cuentos infantiles, rompecabezas, plastilina, colores, acuarelas, juegos de memoria, bloques de construcción y cuadernos para colorear</strong>, impulsamos su motricidad, atención, imaginación y confianza para aprender creando.
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- PUNTO 3: Kit escolar -->
+        <article class="accordion-item bg-white rounded-3xl border-2 border-purple-200/80 hover:border-brand-purple shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden">
+          <button 
+            type="button" 
+            class="accordion-trigger w-full text-left p-5 sm:p-6 flex items-center justify-between gap-4 focus:outline-none focus-visible:ring-4 focus-visible:ring-purple-300"
+            aria-expanded="false"
+          >
+            <div class="flex items-start sm:items-center gap-4 sm:gap-5">
+              <span class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-brand-purple text-white font-extrabold text-xl sm:text-2xl flex items-center justify-center shrink-0 shadow-md">
+                3
+              </span>
+              <div>
+                <h3 class="text-lg sm:text-xl font-extrabold text-brand-purple uppercase tracking-wide">
+                  3. Kit escolar
+                </h3>
+                <p class="text-gray-600 text-sm sm:text-base mt-1">
+                  Un kit para que lleguen listos, felices y seguros a clases.
+                </p>
+              </div>
+            </div>
+            <span class="chevron-icon w-9 h-9 rounded-full bg-brand-lilac text-brand-purple flex items-center justify-center shrink-0 transition-all duration-300">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </span>
+          </button>
+
+          <div class="accordion-content">
+            <div class="accordion-inner">
+              <div class="px-5 sm:px-6 pb-6 pt-2 border-t border-purple-100 bg-brand-lilacLight/40 text-gray-700 space-y-3 text-base leading-relaxed">
+                <h4 class="font-extrabold text-brand-purpleDark text-lg">
+                  Equipados para construir su futuro con entusiasmo
+                </h4>
+                <p>
+                  Contar con sus propias herramientas escolares fortalece su autoestima, motivación y sentido de pertenencia en el aula, ayudando a prevenir el rezago y la deserción escolar en educación básica.
+                </p>
+                <div class="bg-white rounded-2xl p-4 border border-purple-100">
+                  <p class="font-bold text-brand-purpleDark mb-2 text-sm uppercase tracking-wide">
+                    ¿Qué puede incluir un Kit Escolar Básico?
+                  </p>
+                  <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm sm:text-base text-gray-700">
+                    <li class="flex items-center gap-2"><span class="text-brand-pink font-bold">•</span> Mochila o lapicera resistente</li>
+                    <li class="flex items-center gap-2"><span class="text-brand-pink font-bold">•</span> Cuadernos profesionales de raya y cuadrícula</li>
+                    <li class="flex items-center gap-2"><span class="text-brand-pink font-bold">•</span> Lápices de grafito, plumas y bicolor</li>
+                    <li class="flex items-center gap-2"><span class="text-brand-pink font-bold">•</span> Caja de lápices de colores</li>
+                    <li class="flex items-center gap-2"><span class="text-brand-pink font-bold">•</span> Goma de borrar y sacapuntas</li>
+                    <li class="flex items-center gap-2"><span class="text-brand-pink font-bold">•</span> Juego de geometría, tijeras escolares y pegamento</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- PUNTO 4: Apoyo monetario (Texto exacto pedido por el usuario) -->
+        <article class="accordion-item bg-white rounded-3xl border-2 border-purple-200/80 hover:border-brand-purple shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden">
+          <button 
+            type="button" 
+            class="accordion-trigger w-full text-left p-5 sm:p-6 flex items-center justify-between gap-4 focus:outline-none focus-visible:ring-4 focus-visible:ring-purple-300"
+            aria-expanded="false"
+          >
+            <div class="flex items-start sm:items-center gap-4 sm:gap-5">
+              <span class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-brand-purple text-white font-extrabold text-xl sm:text-2xl flex items-center justify-center shrink-0 shadow-md">
+                4
+              </span>
+              <div>
+                <h3 class="text-lg sm:text-xl font-extrabold text-brand-purple uppercase tracking-wide">
+                  4. Apoyo monetario
+                </h3>
+                <p class="text-gray-600 text-sm sm:text-base mt-1">
+                  Aportaciones voluntarias para transformar pequeñas acciones en grandes sonrisas.
+                </p>
+              </div>
+            </div>
+            <span class="chevron-icon w-9 h-9 rounded-full bg-brand-lilac text-brand-purple flex items-center justify-center shrink-0 transition-all duration-300">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </span>
+          </button>
+
+          <div class="accordion-content">
+            <div class="accordion-inner">
+              <div class="px-5 sm:px-6 pb-6 pt-2 border-t border-purple-100 bg-brand-lilacLight/40 text-gray-700 space-y-3 text-base leading-relaxed">
+                <p>
+                  También aceptamos aportaciones monetarias voluntarias de personas que deseen contribuir al crecimiento de nuestras actividades solidarias.
+                </p>
+                <p>
+                  El dinero recaudado será destinado exclusivamente a cubrir las necesidades de las actividades comunitarias, principalmente la compra de alimentos para los refrigerios, la adquisición de artículos necesarios para las entregas y la compra de juguetes o regalos para los niños beneficiarios.
+                </p>
+                <p>
+                  Cada aportación será de gran importancia, sin importar la cantidad, ya que representa una oportunidad para llegar a más pequeños y ampliar nuestro apoyo.
+                </p>
+                <p>
+                  Nuestro compromiso es utilizar los recursos de manera responsable y transparente, procurando que cada contribución se transforme en una ayuda real para quienes más lo necesitan.
+                </p>
+                <p class="font-extrabold text-brand-purple text-base sm:text-lg pt-1">
+                  ¡Porque cuando unimos nuestros corazones, podemos transformar pequeñas acciones en grandes sonrisas! ❤️
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- SECCIÓN 4: ¿CÓMO PUEDES APOYAR? (DONACIONES ABIERTAS ROPA Y JUGUETES) -->
+    <!-- =================================================================== -->
+    <section id="como-apoyar" class="reveal-on-scroll bg-gradient-to-br from-brand-purple to-brand-purpleDark rounded-3xl p-6 sm:p-10 text-white shadow-2xl shadow-purple-900/20 relative overflow-hidden">
+      <div class="absolute -right-12 -bottom-12 w-56 h-56 rounded-full bg-white/5 pointer-events-none"></div>
+      <div class="absolute -left-10 -top-10 w-40 h-40 rounded-full bg-brand-pink/15 pointer-events-none"></div>
+
+      <div class="relative z-10">
+        <span class="inline-block bg-white/15 text-brand-gold font-extrabold text-xs uppercase tracking-widest px-3.5 py-1.5 rounded-full mb-3">
+          Convocatoria Abierta de Donaciones
+        </span>
+        <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight mb-3">
+          ¿CÓMO PUEDES APOYAR?
+        </h2>
+        <p class="text-purple-100 text-base sm:text-lg leading-relaxed mb-7">
+          Además de alimentos, útiles y donativos, estamos recibiendo con los brazos abiertos donaciones en especie de <strong>prendas de vestir</strong> y <strong>juguetes o regalos</strong>. ¡Todo suma, nada es poco!
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          
+          <!-- Donación de Prendas -->
+          <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-5 sm:p-6 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center gap-3 mb-3">
+                <span class="w-10 h-10 rounded-xl bg-brand-gold text-brand-purpleDark flex items-center justify-center font-bold shrink-0">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"/>
+                  </svg>
+                </span>
+                <h3 class="text-lg sm:text-xl font-extrabold text-white">
+                  Donación de prendas de vestir
+                </h3>
+              </div>
+              <p class="text-purple-100 text-sm sm:text-base leading-relaxed">
+                Te invitamos a donar <strong>prendas de vestir en buen estado</strong> que ya no utilices, pero que aún pueden ser de gran utilidad para un pequeño. Con tu ayuda brindamos ropa digna y adecuada ante los cambios de clima y su vida cotidiana.
+              </p>
+            </div>
+          </div>
+
+          <!-- Entrega de Juguetes y Regalos -->
+          <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-5 sm:p-6 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center gap-3 mb-3">
+                <span class="w-10 h-10 rounded-xl bg-brand-pink text-white flex items-center justify-center font-bold shrink-0">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/>
+                  </svg>
+                </span>
+                <h3 class="text-lg sm:text-xl font-extrabold text-white">
+                  Entrega de juguetes y regalos
+                </h3>
+              </div>
+              <p class="text-purple-100 text-sm sm:text-base leading-relaxed">
+                También recibimos <strong>juguetes y pequeños regalos</strong> (especialmente rumbo a la temporada decembrina) para regalarles momentos de felicidad, ilusión y recreación, recordándoles su derecho a jugar, disfrutar su infancia y recibir cariño.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- SECCIÓN 5: ÚNETE A NUESTRA COMUNIDAD + ENLACE A WHATSAPP ¡SÚMATE!   -->
+    <!-- =================================================================== -->
+    <section id="sumate" class="reveal-on-scroll bg-white rounded-3xl p-6 sm:p-10 shadow-xl border-2 border-purple-200 text-center space-y-5">
+      <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-brand-lilac text-brand-purple mx-auto">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+        </svg>
+      </div>
+
+      <div class="max-w-2xl mx-auto space-y-2">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-brand-purpleDark">
+          Únete a nuestra comunidad
+        </h2>
+        <p class="text-lg sm:text-xl font-bold text-brand-purple">
+          Que ningún niño vaya a la escuela con las manos vacías.
+        </p>
+        <p class="text-gray-600 text-sm sm:text-base pt-1 leading-relaxed">
+          Entra a nuestro grupo oficial de WhatsApp para coordinarnos directamente: ahí podrás contarnos <strong>qué deseas donar</strong> y <strong>en qué punto te gustaría entregarlo</strong>.
+        </p>
+      </div>
+
+      <!-- Botón amarillo estilo cartel "¡SÚMATE!" con enlace exacto a WhatsApp -->
+      <div class="pt-2">
+        <a 
+          href="https://chat.whatsapp.com/CckRKKEJ5wTJo4VWp8JxxM?s=sh&p=a&iam=2" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="inline-flex items-center justify-center gap-3 w-full sm:w-auto sm:min-w-[320px] bg-brand-gold hover:bg-brand-goldHover text-brand-purpleDark font-extrabold text-xl sm:text-2xl px-8 py-4 rounded-full shadow-lg shadow-amber-500/30 border-2 border-amber-300 transition-all duration-300 transform hover:scale-105 active:scale-95"
+        >
+          <svg class="w-7 h-7 fill-current text-brand-purpleDark shrink-0" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.029 18.88c-1.161 0-2.305-.292-3.318-.844l-3.677.964.984-3.595c-.607-1.052-.927-2.246-.926-3.468.001-3.825 3.113-6.937 6.937-6.937 1.856.001 3.598.723 4.907 2.034 1.31 1.311 2.031 3.054 2.03 4.908-.001 3.825-3.113 6.938-6.937 6.938z"/>
+          </svg>
+          <span>¡SÚMATE!</span>
+        </a>
+        <p class="text-xs text-gray-500 mt-3">
+          Al hacer clic serás redirigido al grupo de WhatsApp de Corazones Unidos
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Pie de página cálido -->
+  <footer class="bg-brand-purpleDeep text-purple-200 py-8 px-4 text-center text-sm">
+    <p class="font-bold text-white text-base mb-1">Corazones Unidos · Juntos por una infancia feliz</p>
+    <p class="text-purple-300">Comunidad solidaria · Estudiantes de Psicología</p>
+  </footer>
+
+  <!-- ===================================================================== -->
+  <!-- JAVASCRIPT: SELLO FESTONEADO EXACTO DE 16 ONDAS, ACORDEÓN Y PARTÍCULAS -->
+  <!-- ===================================================================== -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Generar con precisión matemática el sello festoneado de 16 ondas idéntico a la imagen
+      function buildScallopPath(cx, cy, baseRadius, waveAmp, lobes) {
+        const totalSteps = 360;
+        let pathData = '';
+        for (let i = 0; i <= totalSteps; i++) {
+          const theta = (i / totalSteps) * Math.PI * 2 - Math.PI / 2;
+          // |cos(lobes * theta / 2)| crea arcos redondeados hacia afuera idénticos a la imagen
+          const wave = Math.abs(Math.cos((lobes * (theta + Math.PI / 2)) / 2));
+          const r = baseRadius + waveAmp * wave;
+          const x = cx + r * Math.cos(theta);
+          const y = cy + r * Math.sin(theta);
+          pathData += (i === 0 ? `M ${x.toFixed(2)},${y.toFixed(2)} ` : `L ${x.toFixed(2)},${y.toFixed(2)} `);
+        }
+        return pathData + 'Z';
+      }
+
+      const outerScallop = document.getElementById('scallop-outer');
+      const innerScallop = document.getElementById('scallop-inner');
+
+      if (outerScallop && innerScallop) {
+        outerScallop.setAttribute('d', buildScallopPath(250, 250, 200, 22, 16));
+        innerScallop.setAttribute('d', buildScallopPath(250, 250, 185, 20, 16));
+      }
+
+      // 2. Lógica de tarjetas interactivas desplegables (Acordeón)
+      const triggers = document.querySelectorAll('.accordion-trigger');
+
+      triggers.forEach((trigger) => {
+        trigger.addEventListener('click', () => {
+          const item = trigger.closest('.accordion-item');
+          const isOpen = item.classList.contains('is-open');
+
+          document.querySelectorAll('.accordion-item.is-open').forEach((openItem) => {
+            if (openItem !== item) {
+              openItem.classList.remove('is-open');
+              openItem.querySelector('.accordion-trigger').setAttribute('aria-expanded', 'false');
+            }
+          });
+
+          item.classList.toggle('is-open', !isOpen);
+          trigger.setAttribute('aria-expanded', String(!isOpen));
+        });
+      });
+
+      // 3. Generador de corazones flotantes sutiles en la pantalla de bienvenida
+      const heartsContainer = document.getElementById('hearts-container');
+      const heartColors = ['#facc15', '#e11d48', '#c084fc', '#ffffff', '#10b981'];
+
+      function createFloatingHeart() {
+        if (!heartsContainer) return;
+        const heart = document.createElement('div');
+        heart.className = 'floating-heart';
+        
+        const size = Math.floor(Math.random() * 14) + 12;
+        const left = Math.random() * 100;
+        const duration = (Math.random() * 4) + 4.5;
+        const color = heartColors[Math.floor(Math.random() * heartColors.length)];
+
+        heart.style.left = `${left}%`;
+        heart.style.bottom = '15%';
+        heart.style.animationDuration = `${duration}s`;
+        heart.innerHTML = `
+          <svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="${color}" opacity="0.78">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+        `;
+
+        heartsContainer.appendChild(heart);
+        setTimeout(() => {
+          heart.remove();
+        }, duration * 1000);
+      }
+
+      for (let i = 0; i < 7; i++) {
+        setTimeout(createFloatingHeart, i * 350);
+      }
+      setInterval(createFloatingHeart, 1300);
+
+      // 4. Animaciones suaves al hacer scroll
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
+      document.querySelectorAll('.reveal-on-scroll').forEach((el) => observer.observe(el));
+    });
+  </script>
+</body>
+</html>
